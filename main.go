@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"net/http"
+	"html/template"
 	"os"
 	"os/signal"
 	"secserv/utils"
@@ -24,6 +25,8 @@ func main() {
 	serverErr := make(chan error, 1)
 
 	go func() {
+		http.HandleFunc("/", indexHandler)
+
 		log.Info("Try to start server...")
 		err := server.ListenAndServe()
 		if err != nil {
@@ -43,4 +46,14 @@ func main() {
 	case <-ctx.Done():
 		log.Error("Context DONE!!! Ouu my... this is terrible!")
 	}
+}
+
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("templates/index.html")
+	if err != nil {
+		http.Error(w, "Failed get index.html", http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(w, nil)
 }
