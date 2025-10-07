@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"net/http"
-	"html/template"
 	"os"
 	"os/signal"
+	"secserv/controllers"
+	"secserv/models"
 	"secserv/utils"
+	"secserv/view"
 	"syscall"
 )
 
@@ -21,11 +23,15 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	mainView := view.NewHtmlView()
+	countServ := models.NewCountService()
+	mainCtrl := controllers.NewCountroller(countServ, mainView)
+
 	server := &http.Server{Addr: appCfg.HostAddress}
 	serverErr := make(chan error, 1)
 
 	go func() {
-		http.HandleFunc("/", indexHandler)
+		http.HandleFunc("/", mainCtrl.IndexHandler)
 
 		log.Info("Try to start server...")
 		err := server.ListenAndServe()
@@ -46,14 +52,4 @@ func main() {
 	case <-ctx.Done():
 		log.Error("Context DONE!!! Ouu my... this is terrible!")
 	}
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("templates/index.html")
-	if err != nil {
-		http.Error(w, "Failed get index.html", http.StatusInternalServerError)
-		return
-	}
-
-	t.Execute(w, nil)
 }
