@@ -8,16 +8,19 @@ import (
 
 type Controller struct {
 	counter  *models.CountService
+	strData  *models.StringService
 	htmlView *view.HtmlView
 }
 
-func NewCountroller(countServ *models.CountService, htmlView *view.HtmlView) *Controller {
+func NewCountroller(countServ *models.CountService, strServ *models.StringService, htmlView *view.HtmlView) *Controller {
 	return &Controller{
 		counter:  countServ,
+		strData:  strServ,
 		htmlView: htmlView,
 	}
 }
 
 func (c *Controller) IndexHandler(w http.ResponseWriter, r *http.Request) {
-	c.htmlView.GetIndexPage(c.counter.IncrementAndGet(), &w)
+	//c.htmlView.GetIndexPage(c.counter.IncrementAndGet(), &w)
+	c.htmlView.GetAuthPage(c.strData.GetWelcomeMsg(), c.strData.YandexId, c.strData.YandexRedirectURI, &w)
 }

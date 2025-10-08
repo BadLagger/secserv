@@ -25,7 +25,8 @@ func main() {
 
 	mainView := view.NewHtmlView()
 	countServ := models.NewCountService()
-	mainCtrl := controllers.NewCountroller(countServ, mainView)
+	strServ := models.NewStringService("877224072a4d47958acc083523b6f397", "http://95.165.171.184:8089/yandex_oauth")
+	mainCtrl := controllers.NewCountroller(countServ, strServ, mainView)
 
 	server := &http.Server{Addr: appCfg.HostAddress}
 	serverErr := make(chan error, 1)
