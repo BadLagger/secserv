@@ -15,6 +15,11 @@ func NewHtmlView() *HtmlView {
 	}
 }
 
+func (v *HtmlView) GetNotFoundPage(w *http.ResponseWriter) {
+	(*w).WriteHeader(http.StatusNotFound)
+	v.GetMockPage("Page Not Found 404", w)
+}
+
 func (v *HtmlView) GetIndexPage(count int, w *http.ResponseWriter) {
 	t, err := template.ParseFiles("templates/index.html")
 	if err != nil {

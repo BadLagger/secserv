@@ -10,6 +10,8 @@ import (
 	"secserv/utils"
 	"secserv/view"
 	"syscall"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -35,14 +37,16 @@ func main() {
 		log.Info("SSL disable!")
 	}
 
-	if len(appCfg.YandexId) == 0 {
-		log.Critical("You should set enviromnent YANDEX_ID")
-		return
-	}
+	if appCfg.YandexEnable {
+		if len(appCfg.YandexId) == 0 {
+			log.Critical("You should set enviromnent YANDEX_ID")
+			return
+		}
 
-	if len(appCfg.YandexRedirectURL) == 0 {
-		log.Critical("You should set enviromnent YANDEX_REDIRECT_URL")
-		return
+		if len(appCfg.YandexRedirectURL) == 0 {
+			log.Critical("You should set enviromnent YANDEX_REDIRECT_URL")
+			return
+		}
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -53,12 +57,23 @@ func main() {
 	strServ := models.NewStringService(appCfg.YandexId, appCfg.YandexRedirectURL)
 	mainCtrl := controllers.NewCountroller(countServ, strServ, mainView)
 
-	server := &http.Server{Addr: appCfg.HostAddress}
+	router := mux.NewRouter()
+	server := &http.Server{
+		Addr:    appCfg.HostAddress,
+		Handler: router,
+	}
 	serverErr := make(chan error, 1)
 
 	go func() {
-		http.HandleFunc("/", mainCtrl.IndexHandler)
-		http.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler)
+
+		router.NotFoundHandler = http.HandlerFunc(mainCtrl.NotFoundHandler)
+
+		if appCfg.YandexEnable {
+			router.HandleFunc("/", mainCtrl.IndexHandler).Methods("GET")
+			router.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler).Methods("GET")
+		} else {
+			router.HandleFunc("/", mainCtrl.MockHandler).Methods("GET")
+		}
 
 		log.Info("Try to start server...")
 		var err error

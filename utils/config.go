@@ -14,6 +14,7 @@ type Config struct {
 	FullchainPemPath  string
 	PrivateSSLPath    string
 	SSLenable         bool
+	YandexEnable      bool
 }
 
 func CfgLoad(app string) *Config {
@@ -27,6 +28,7 @@ func CfgLoad(app string) *Config {
 		FullchainPemPath:  getEnv("FULLCHAIN_PEM", ""),
 		PrivateSSLPath:    getEnv("PRIVATE_SSL_PATH", ""),
 		SSLenable:         getEnvBool("SSL_ENABLE", false),
+		YandexEnable:      getEnvBool("YANDEX_ENABLE", false),
 	}
 }
 
