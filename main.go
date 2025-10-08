@@ -20,14 +20,19 @@ func main() {
 
 	appCfg := utils.CfgLoad("SecServ")
 
-	if len(appCfg.FullchainPemPath) == 0 {
-		log.Critical("You should set environment FULLCHAIN_PEM")
-		return
-	}
+	if appCfg.SSLenable {
+		log.Info("SSL enable!")
+		if len(appCfg.FullchainPemPath) == 0 {
+			log.Critical("You should set environment FULLCHAIN_PEM")
+			return
+		}
 
-	if len(appCfg.PrivateSSLPath) == 0 {
-		log.Critical("You should set environment PRIVATE_SSL_PATH")
-		return
+		if len(appCfg.PrivateSSLPath) == 0 {
+			log.Critical("You should set environment PRIVATE_SSL_PATH")
+			return
+		}
+	} else {
+		log.Info("SSL disable!")
 	}
 
 	if len(appCfg.YandexId) == 0 {
@@ -56,7 +61,12 @@ func main() {
 		http.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler)
 
 		log.Info("Try to start server...")
-		err := server.ListenAndServeTLS(appCfg.FullchainPemPath, appCfg.PrivateSSLPath)
+		var err error
+		if appCfg.SSLenable {
+			err = server.ListenAndServeTLS(appCfg.FullchainPemPath, appCfg.PrivateSSLPath)
+		} else {
+			err = server.ListenAndServe()
+		}
 		if err != nil {
 			serverErr <- err
 		}

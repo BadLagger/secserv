@@ -42,9 +42,9 @@ func (v *HtmlView) GetAuthPage(msg, id, uri string, w *http.ResponseWriter) {
 }
 
 func (v *HtmlView) GetMockPage(msg string, w *http.ResponseWriter) {
-	t, err := template.ParseFiles("templates/mock.html")
+	t, err := template.ParseFiles("templates/moc.html")
 	if err != nil {
-		http.Error(*w, "Failed get index.html", http.StatusInternalServerError)
+		http.Error(*w, "Failed get moc.html", http.StatusInternalServerError)
 		return
 	}
 

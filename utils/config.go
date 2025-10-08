@@ -13,6 +13,7 @@ type Config struct {
 	YandexRedirectURL string
 	FullchainPemPath  string
 	PrivateSSLPath    string
+	SSLenable         bool
 }
 
 func CfgLoad(app string) *Config {
@@ -25,6 +26,7 @@ func CfgLoad(app string) *Config {
 		YandexRedirectURL: getEnv("YANDEX_REDIRECT_URL", ""),
 		FullchainPemPath:  getEnv("FULLCHAIN_PEM", ""),
 		PrivateSSLPath:    getEnv("PRIVATE_SSL_PATH", ""),
+		SSLenable:         getEnvBool("SSL_ENABLE", false),
 	}
 }
 
