@@ -7,16 +7,24 @@ import (
 )
 
 type Config struct {
-	AppName     string
-	HostAddress string
+	AppName           string
+	HostAddress       string
+	YandexId          string
+	YandexRedirectURL string
+	FullchainPemPath  string
+	PrivateSSLPath    string
 }
 
 func CfgLoad(app string) *Config {
 	GlobalLogger().Info("Loading config for %s", app)
 	defer GlobalLogger().Info("Loading config for %s done", app)
 	return &Config{
-		AppName:     app,
-		HostAddress: getEnv("HOST_ADDRESS", ":8089"),
+		AppName:           app,
+		HostAddress:       getEnv("HOST_ADDRESS", ":8089"),
+		YandexId:          getEnv("YANDEX_ID", ""),
+		YandexRedirectURL: getEnv("YANDEX_REDIRECT_URL", ""),
+		FullchainPemPath:  getEnv("FULLCHAIN_PEM", ""),
+		PrivateSSLPath:    getEnv("PRIVATE_SSL_PATH", ""),
 	}
 }
 

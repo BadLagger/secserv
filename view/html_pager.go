@@ -40,3 +40,15 @@ func (v *HtmlView) GetAuthPage(msg, id, uri string, w *http.ResponseWriter) {
 		"YaRedirectURI":  uri,
 	})
 }
+
+func (v *HtmlView) GetMockPage(msg string, w *http.ResponseWriter) {
+	t, err := template.ParseFiles("templates/mock.html")
+	if err != nil {
+		http.Error(*w, "Failed get index.html", http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(*w, map[string]interface{}{
+		"MockMsg": msg,
+	})
+}

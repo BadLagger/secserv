@@ -20,12 +20,32 @@ func main() {
 
 	appCfg := utils.CfgLoad("SecServ")
 
+	if len(appCfg.FullchainPemPath) == 0 {
+		log.Critical("You should set environment FULLCHAIN_PEM")
+		return
+	}
+
+	if len(appCfg.PrivateSSLPath) == 0 {
+		log.Critical("You should set environment PRIVATE_SSL_PATH")
+		return
+	}
+
+	if len(appCfg.YandexId) == 0 {
+		log.Critical("You should set enviromnent YANDEX_ID")
+		return
+	}
+
+	if len(appCfg.YandexRedirectURL) == 0 {
+		log.Critical("You should set enviromnent YANDEX_REDIRECT_URL")
+		return
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	mainView := view.NewHtmlView()
 	countServ := models.NewCountService()
-	strServ := models.NewStringService("877224072a4d47958acc083523b6f397", "http://95.165.171.184:8089/yandex_oauth")
+	strServ := models.NewStringService(appCfg.YandexId, appCfg.YandexRedirectURL)
 	mainCtrl := controllers.NewCountroller(countServ, strServ, mainView)
 
 	server := &http.Server{Addr: appCfg.HostAddress}
@@ -33,9 +53,10 @@ func main() {
 
 	go func() {
 		http.HandleFunc("/", mainCtrl.IndexHandler)
+		http.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler)
 
 		log.Info("Try to start server...")
-		err := server.ListenAndServe()
+		err := server.ListenAndServeTLS(appCfg.FullchainPemPath, appCfg.PrivateSSLPath)
 		if err != nil {
 			serverErr <- err
 		}

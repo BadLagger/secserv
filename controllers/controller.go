@@ -22,5 +22,10 @@ func NewCountroller(countServ *models.CountService, strServ *models.StringServic
 
 func (c *Controller) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	//c.htmlView.GetIndexPage(c.counter.IncrementAndGet(), &w)
-	c.htmlView.GetAuthPage(c.strData.GetWelcomeMsg(), c.strData.YandexId, c.strData.YandexRedirectURI, &w)
+	//c.htmlView.GetAuthPage(c.strData.GetWelcomeMsg(), c.strData.YandexId, c.strData.YandexRedirectURI, &w)
+	c.htmlView.GetMockPage("Test Mock Page", &w)
+}
+
+func (c *Controller) YandexAuthHandler(w http.ResponseWriter, r *http.Request) {
+
 }
