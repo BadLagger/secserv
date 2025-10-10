@@ -3,6 +3,7 @@ package view
 import (
 	"html/template"
 	"net/http"
+	"secserv/models"
 )
 
 type HtmlView struct {
@@ -60,7 +61,7 @@ func (v *HtmlView) GetMockPage(msg string, w *http.ResponseWriter) {
 	})
 }
 
-func (v *HtmlView) GetSimplePage(title string, btn1Msg string, btn2Msg string, w *http.ResponseWriter) {
+func (v *HtmlView) GetSimplePage(title string, btn1 *models.ButtonUrl, w *http.ResponseWriter) {
 	t, err := template.ParseFiles(v.simplePath)
 	if err != nil {
 		http.Error(*w, "Failed get simple path", http.StatusInternalServerError)
@@ -69,7 +70,9 @@ func (v *HtmlView) GetSimplePage(title string, btn1Msg string, btn2Msg string, w
 
 	t.Execute(*w, map[string]interface{}{
 		"MockMsg":     title,
-		"Button1Name": btn1Msg,
-		"Button2Name": btn2Msg,
+		"Button1Name": btn1.GetText(),
+		"Button1Url":  btn1.GetURL(),
+		/*"Button2Name": btn2.GetText(),
+		"Button2Url":  btn2.GetURL(),*/
 	})
 }

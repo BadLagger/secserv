@@ -48,6 +48,8 @@
                 cursor: pointer;
                 transition: all 0.3s ease;
                 min-width: 120px;
+                text-decoration: none;
+                display: inline-block;
             }
             
             .dynamic-button:hover {
@@ -59,6 +61,17 @@
                 background-color: inherit;
                 color: white;
                 transform: translateY(0);
+            }
+
+            /* Стиль для неактивной кнопки, если URL нет */
+            .dynamic-button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            
+            .dynamic-button:disabled:hover {
+                transform: none;
+                opacity: 0.5;
             }
         </style>
     </head>
@@ -73,27 +86,25 @@
             <div id="buttonContainerId">
                 {{if .Button1Name}}
                     {{if ne (len .Button1Name) 0}}
-                        <button class="dynamic-button" style="border-color: #88C0D0; color: #88C0D0;" 
+                         <a href="{{.Button1Url}}" class="dynamic-button" style="border-color: #88C0D0; color: #88C0D0;" 
                                 onmouseover="this.style.backgroundColor='#88C0D0'; this.style.color='white'" 
                                 onmouseout="this.style.backgroundColor='white'; this.style.color='#88C0D0'"
                                 onmousedown="this.style.backgroundColor='#88C0D0'; this.style.color='white'; this.style.borderColor='white'"
                                 onmouseup="this.style.backgroundColor='#88C0D0'; this.style.color='white'">
-                            {{.Button1Name}}
-                        </button>
+                                {{.Button1Name}}
+                         </a>
                     {{end}}
                 {{end}}
                 
-                {{if .Button2Name}}
+              <!--  {{if .Button2Name}}
                     {{if ne (len .Button2Name) 0}}
-                        <button class="dynamic-button" style="border-color: #A3BE8C; color: #A3BE8C;" 
+                         <a href="{{.Button2Url}}" class="dynamic-button" style="border-color: #A3BE8C; color: #A3BE8C;" 
                                 onmouseover="this.style.backgroundColor='#A3BE8C'; this.style.color='white'" 
                                 onmouseout="this.style.backgroundColor='white'; this.style.color='#A3BE8C'"
                                 onmousedown="this.style.backgroundColor='#A3BE8C'; this.style.color='white'; this.style.borderColor='white'"
                                 onmouseup="this.style.backgroundColor='#A3BE8C'; this.style.color='white'">
-                            {{.Button2Name}}
-                        </button>
                     {{end}}
-                {{end}}
+                {{end}} -->
             </div>
         </div>
     </body>

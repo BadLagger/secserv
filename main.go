@@ -55,10 +55,13 @@ func main() {
 	mainView := view.NewHtmlView()
 	countServ := models.NewCountService()
 	strServ := models.NewStringService(appCfg.YandexId, appCfg.YandexRedirectURL)
-	pageStr := models.NewPageService([]string{
-		"Главная страница",
-		"Страница 2",
-		"Сраница 3",
+	pageStr := models.NewPageService([]*models.PageMain{
+		models.NewPageMain("Главная страница", []*models.ButtonUrl{
+			models.NewButtonUrl("Вход", "/enter"),
+		}),
+		models.NewPageMain("Комната 1", []*models.ButtonUrl{
+			models.NewButtonUrl("Выход", "/"),
+		}),
 	})
 	mainCtrl := controllers.NewCountroller(countServ, pageStr, strServ, mainView)
 
@@ -74,6 +77,8 @@ func main() {
 		router.NotFoundHandler = http.HandlerFunc(mainCtrl.NotFoundHandler)
 
 		router.HandleFunc("/", mainCtrl.SimplePageHandler).Methods("GET")
+		router.HandleFunc("/enter", mainCtrl.SimpleEnterPageHandler).Methods("GET")
+		//router.HandleFunc("/exit", mainCtrl.SimpleExitPageHandler).Methods("GET")
 		/*if appCfg.YandexEnable {
 			router.HandleFunc("/", mainCtrl.IndexHandler).Methods("GET")
 			router.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler).Methods("GET")

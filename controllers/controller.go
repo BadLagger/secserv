@@ -31,22 +31,22 @@ func (c *Controller) MockHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) IndexHandler(w http.ResponseWriter, r *http.Request) {
-	//c.htmlView.GetIndexPage(c.counter.IncrementAndGet(), &w)
 	c.htmlView.GetAuthPage(c.strData.GetWelcomeMsg(), c.strData.YandexId, c.strData.YandexRedirectURI, &w)
 }
 
 func (c *Controller) SimplePageHandler(w http.ResponseWriter, r *http.Request) {
-	if c.pager.State == 0 {
-		c.htmlView.GetSimplePage(c.pager.GetCurrentPage(), "Вход", "", &w)
-		c.pager.State++
-	} else if len(c.pager.GetNextPage()) > 0 {
-		c.htmlView.GetSimplePage(c.pager.GetNextPage(), "Следующая", "", &w)
-		c.pager.State++
-	} else {
-		c.htmlView.GetSimplePage(c.pager.GetPreviousPage(), "Предыдущая", "", &w)
-		c.pager.State--
-	}
+	var page *models.PageMain = c.pager.GetPageById(0)
+	c.htmlView.GetSimplePage(page.GetTitle(), page.GetButton()[0], &w)
 }
+
+func (c *Controller) SimpleEnterPageHandler(w http.ResponseWriter, r *http.Request) {
+	var page *models.PageMain = c.pager.GetPageById(1)
+	c.htmlView.GetSimplePage(page.GetTitle(), page.GetButton()[0], &w)
+}
+
+/*func (c *Controller) SimpleExitPageHandler(w http.ResponseWriter, r *http.Request) {
+
+}*/
 
 func (c *Controller) YandexAuthHandler(w http.ResponseWriter, r *http.Request) {
 
