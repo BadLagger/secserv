@@ -68,12 +68,14 @@ func main() {
 
 		router.NotFoundHandler = http.HandlerFunc(mainCtrl.NotFoundHandler)
 
-		if appCfg.YandexEnable {
+		router.HandleFunc("/", mainCtrl.MainPageHandler).Methods("GET")
+		router.HandleFunc("/enter", mainCtrl.PrivateCabPageHandler).Methods("GET")
+		/*if appCfg.YandexEnable {
 			router.HandleFunc("/", mainCtrl.IndexHandler).Methods("GET")
 			router.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler).Methods("GET")
 		} else {
 			router.HandleFunc("/", mainCtrl.MockHandler).Methods("GET")
-		}
+		}*/
 
 		log.Info("Try to start server...")
 		var err error

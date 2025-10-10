@@ -57,3 +57,27 @@ func (v *HtmlView) GetMockPage(msg string, w *http.ResponseWriter) {
 		"MockMsg": msg,
 	})
 }
+
+func (v *HtmlView) GetMainPage(ip string, w *http.ResponseWriter) {
+	t, err := template.ParseFiles("templates/mifi_page1.html")
+	if err != nil {
+		http.Error(*w, "Failed get mifi_page1.html", http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(*w, map[string]interface{}{
+		"UserIp": ip,
+	})
+}
+
+func (v *HtmlView) GetPrivateCabPage(ip string, w *http.ResponseWriter) {
+	t, err := template.ParseFiles("templates/mifi_page2.html")
+	if err != nil {
+		http.Error(*w, "Failed get mifi_page2.html", http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(*w, map[string]interface{}{
+		"UserIp": ip,
+	})
+}

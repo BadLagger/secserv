@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mock page</title>
+                <style>
+            body {
+                background-color: #f0f0f0;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+            
+            .auth-container {
+                background-color: white;
+                border-radius: 12px;
+                border: 1px solid #000;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                padding: 40px;
+                text-align: center;
+                max-width: 400px;
+                width: 90%;
+            }
+            
+            h1 {
+                margin-bottom: 30px;
+                color: #333;
+                font-size: 24px;
+            }
+            
+            #buttonContainerId {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .dynamic-button {
+                background-color: white;
+                border: 3px solid;
+                border-radius: 25px;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-width: 120px;
+                text-decoration: none;
+                display: inline-block;
+            }
+            
+            .dynamic-button:hover {
+                opacity: 0.8;
+                transform: translateY(-2px);
+            }
+            
+            .dynamic-button:active {
+                background-color: inherit;
+                color: white;
+                transform: translateY(0);
+            }
+
+            .dynamic-button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            
+            .dynamic-button:disabled:hover {
+                transform: none;
+                opacity: 0.5;
+            }
+        </style>
+    </head>
+    <body>
+          <div class="auth-container">
+            <h1>Личный кабинет</h1>
+            <p>{{.UserIp}}</p>
+            <div id="buttonContainerId">
+                <a href="/" class="dynamic-button" style="border-color: #88C0D0; color: #88C0D0;" 
+                    onmouseover="this.style.backgroundColor='#88C0D0'; this.style.color='white'" 
+                    onmouseout="this.style.backgroundColor='white'; this.style.color='#88C0D0'"
+                    onmousedown="this.style.backgroundColor='#88C0D0'; this.style.color='white'; this.style.borderColor='white'"
+                    onmouseup="this.style.backgroundColor='#88C0D0'; this.style.color='white'">
+                Выход
+                </a>
+            </div>
+        </div>
+    </body>
+</html>
