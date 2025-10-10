@@ -6,12 +6,14 @@ import (
 )
 
 type HtmlView struct {
-	indexPath string
+	indexPath  string
+	simplePath string
 }
 
 func NewHtmlView() *HtmlView {
 	return &HtmlView{
-		indexPath: "templates/index.html",
+		indexPath:  "templates/index.html",
+		simplePath: "templates/simple.html",
 	}
 }
 
@@ -55,5 +57,19 @@ func (v *HtmlView) GetMockPage(msg string, w *http.ResponseWriter) {
 
 	t.Execute(*w, map[string]interface{}{
 		"MockMsg": msg,
+	})
+}
+
+func (v *HtmlView) GetSimplePage(title string, btn1Msg string, btn2Msg string, w *http.ResponseWriter) {
+	t, err := template.ParseFiles(v.simplePath)
+	if err != nil {
+		http.Error(*w, "Failed get simple path", http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(*w, map[string]interface{}{
+		"MockMsg":     title,
+		"Button1Name": btn1Msg,
+		"Button2Name": btn2Msg,
 	})
 }

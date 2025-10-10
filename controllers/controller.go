@@ -8,13 +8,15 @@ import (
 
 type Controller struct {
 	counter  *models.CountService
+	pager    *models.PageService
 	strData  *models.StringService
 	htmlView *view.HtmlView
 }
 
-func NewCountroller(countServ *models.CountService, strServ *models.StringService, htmlView *view.HtmlView) *Controller {
+func NewCountroller(countServ *models.CountService, pageServ *models.PageService, strServ *models.StringService, htmlView *view.HtmlView) *Controller {
 	return &Controller{
 		counter:  countServ,
+		pager:    pageServ,
 		strData:  strServ,
 		htmlView: htmlView,
 	}
@@ -31,6 +33,19 @@ func (c *Controller) MockHandler(w http.ResponseWriter, r *http.Request) {
 func (c *Controller) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	//c.htmlView.GetIndexPage(c.counter.IncrementAndGet(), &w)
 	c.htmlView.GetAuthPage(c.strData.GetWelcomeMsg(), c.strData.YandexId, c.strData.YandexRedirectURI, &w)
+}
+
+func (c *Controller) SimplePageHandler(w http.ResponseWriter, r *http.Request) {
+	if c.pager.State == 0 {
+		c.htmlView.GetSimplePage(c.pager.GetCurrentPage(), "Вход", "", &w)
+		c.pager.State++
+	} else if len(c.pager.GetNextPage()) > 0 {
+		c.htmlView.GetSimplePage(c.pager.GetNextPage(), "Следующая", "", &w)
+		c.pager.State++
+	} else {
+		c.htmlView.GetSimplePage(c.pager.GetPreviousPage(), "Предыдущая", "", &w)
+		c.pager.State--
+	}
 }
 
 func (c *Controller) YandexAuthHandler(w http.ResponseWriter, r *http.Request) {

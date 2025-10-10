@@ -55,7 +55,12 @@ func main() {
 	mainView := view.NewHtmlView()
 	countServ := models.NewCountService()
 	strServ := models.NewStringService(appCfg.YandexId, appCfg.YandexRedirectURL)
-	mainCtrl := controllers.NewCountroller(countServ, strServ, mainView)
+	pageStr := models.NewPageService([]string{
+		"Главная страница",
+		"Страница 2",
+		"Сраница 3",
+	})
+	mainCtrl := controllers.NewCountroller(countServ, pageStr, strServ, mainView)
 
 	router := mux.NewRouter()
 	server := &http.Server{
@@ -68,12 +73,13 @@ func main() {
 
 		router.NotFoundHandler = http.HandlerFunc(mainCtrl.NotFoundHandler)
 
-		if appCfg.YandexEnable {
+		router.HandleFunc("/", mainCtrl.SimplePageHandler).Methods("GET")
+		/*if appCfg.YandexEnable {
 			router.HandleFunc("/", mainCtrl.IndexHandler).Methods("GET")
 			router.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler).Methods("GET")
 		} else {
 			router.HandleFunc("/", mainCtrl.MockHandler).Methods("GET")
-		}
+		}*/
 
 		log.Info("Try to start server...")
 		var err error
