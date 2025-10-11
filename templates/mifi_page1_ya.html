@@ -115,18 +115,29 @@
 
             // Функция проверки куки
             function checkAuthCookie() {
-                console.log("Tick-tick");
-                const cookies = document.cookie;
-                if (cookies.includes('auth_token=')) {
-                    console.log('Auth cookie found! Redirecting...');
-                    window.location.href = '/enter';
-                    return true;
+                try {
+                    console.log("Tick-tick");
+                    const cookies = document.cookie;
+                    if (cookies.includes('auth_token=')) {
+                        console.log('Auth cookie found! Redirecting...');
+                        window.location.href = '/enter';
+                        return true;
+                    }
+                    return false;
+                } catch (error) {
+                    console.log("Error in checkAuthCookie (ignoring):", error);
+                    return false;
                 }
-                return false;
             }
 
             // Проверяем каждые 500ms
-            setInterval(checkAuthCookie, 500);
+
+            try {
+                setInterval(checkAuthCookie, 500);
+                console.log("Interval set successfully");
+            } catch (error) {
+                console.log("Error setting interval:", error);
+            }
         </script>
     </body>
 </html>
