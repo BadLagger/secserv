@@ -110,6 +110,7 @@
 
             // В основном окне
             window.addEventListener('message', function(event) {
+                console.log("Main window: received message", event.data)
                 if (event.data.type === 'yandex_oauth_success') {
                         // Получаем данные из OAuth
                     const token = event.data.token;
