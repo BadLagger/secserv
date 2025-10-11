@@ -79,7 +79,7 @@ func (c *Controller) YandexAuthHandler(w http.ResponseWriter, r *http.Request) {
             }, '*');
             
             // Закрываем окно
-            window.close();
+            // window.close();
         </script>
     </head>
     <body>
