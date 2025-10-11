@@ -128,6 +128,7 @@
 
             // Проверяем каждые 500ms после нажатия кнопки
             document.getElementById('buttonContainerId').addEventListener('click', function() {
+                console.log("Click-click");
                 const popup = window.open('/auth/yandex', 'yandex_auth', 'width=600,height=700');
                 
                 // Проверяем когда popup закроется
