@@ -77,6 +77,10 @@ func (v *HtmlView) GetMainPageWithYandex(ip, yaId, yaUri string, w *http.Respons
 		return
 	}
 
+	(*w).Header().Set("Content-Security-Policy",
+		"script-src 'self' 'unsafe-eval' 'unsafe-inline' https://yastatic.net https://mc.yandex.ru; "+
+			"default-src 'self'")
+
 	t.Execute(*w, map[string]interface{}{
 		"UserIp":        ip,
 		"YaClientId":    yaId,

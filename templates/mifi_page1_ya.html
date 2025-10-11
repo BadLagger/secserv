@@ -104,26 +104,14 @@
                     buttonIcon: 'ya',
                 }
             )
-            .then(({handler}) => handler())
-            .then(data => console.log('Сообщение с токеном', data))
-            .catch(error => console.log('Обработка ошибки', error));
+            .then(({handler}) => {
+                console.log('SDK инициализирован!')
+            })
+            .then(data => {
+                console.log('Сообщение с токеном', data)
 
-            // В основном окне
-            window.addEventListener('message', function(event) {
-                console.log("Main window: received message", event.data)
-                if (event.data.type === 'yandex_oauth_success') {
-                        // Получаем данные из OAuth
-                    const token = event.data.token;
-                    const email = event.data.email;
-        
-                    // Сохраняем в localStorage/sessionStorage
-                    localStorage.setItem('yandex_token', token);
-                    localStorage.setItem('user_email', email);
-        
-                    // Перенаправляем на нужную страницу
-                    window.location.href = '/enter';
-                }
-        });
+            })
+            .catch(error => console.log('Обработка ошибки', error));
         </script>
     </body>
 </html>
