@@ -71,13 +71,17 @@ func (c *Controller) YandexAuthHandler(w http.ResponseWriter, r *http.Request) {
         <title>Авторизация успешна</title>
         <script>
             // Отправляем сообщение в родительское окно
-            window.opener.postMessage({
-                type: 'yandex_oauth_success',
-                token: '%s',
-                email: '%s',
-                user_id: '%s'
-            }, '*');
-            
+			try {
+				window.opener.postMessage({
+					type: 'yandex_oauth_success',
+					token: '%s',
+					email: '%s',
+					user_id: '%s'
+				}, '*');
+				console.log("Windows msg was send!")
+			} catch (error) {
+			    console.error("Sending windows msg error:", error)
+			}
             // Закрываем окно
             // window.close();
         </script>
