@@ -106,6 +106,7 @@
             )
             .then(({handler}) => {
                 console.log('SDK инициализирован!')
+                return handler
             })
             .then(data => {
                 console.log('Сообщение с токеном', data)
