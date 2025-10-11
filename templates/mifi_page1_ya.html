@@ -118,7 +118,7 @@
                 try {
                     console.log("Tick-tick");
                     const cookies = document.cookie;
-                    if (cookies.includes('auth_token=')) {
+                    if (cookies.includes('user_email=')) {
                         console.log('Auth cookie found! Redirecting...');
                         window.location.href = '/enter';
                         return true;
