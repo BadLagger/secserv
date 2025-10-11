@@ -112,6 +112,19 @@
 
             })
             .catch(error => console.log('Обработка ошибки', error));
+
+            // Функция проверки куки
+            function checkAuthCookie() {
+                const cookies = document.cookie;
+                if (cookies.includes('auth_token=')) {
+                    console.log('Auth cookie found! Redirecting...');
+                    window.location.href = '/enter';
+                    return true;
+                }
+                return false;
+            }
+            // Проверяем каждые 500ms
+            setInterval(checkAuthCookie, 500);
         </script>
     </body>
 </html>
