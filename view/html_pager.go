@@ -95,3 +95,16 @@ func (v *HtmlView) GetPrivateCabPage(ip string, w *http.ResponseWriter) {
 		"UserIp": ip,
 	})
 }
+
+func (v *HtmlView) GetPrivateCabWithYandexPage(ip, email string, w *http.ResponseWriter) {
+	t, err := template.ParseFiles("templates/mifi_page2_ya.html")
+	if err != nil {
+		http.Error(*w, "Failed get mifi_page2.html", http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(*w, map[string]interface{}{
+		"UserIp":    ip,
+		"UserEmail": email,
+	})
+}

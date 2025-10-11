@@ -114,3 +114,30 @@ func (c *Controller) PrivateCabPageHandler(w http.ResponseWriter, r *http.Reques
 	c.log.Info("GET privatecabpage request from: %s", r.RemoteAddr)
 	c.htmlView.GetPrivateCabPage(r.RemoteAddr, &w)
 }
+
+func (c *Controller) PrivateCabPageWithYandexHandler(w http.ResponseWriter, r *http.Request) {
+	c.log.Info("GET privatecabpage with yandex request from: %s", r.RemoteAddr)
+	emailCookie, err := r.Cookie("user_email")
+	if err != nil {
+		c.log.Error("No email cookie!!")
+		emailCookie.Value = "unknown"
+	}
+	c.log.Debug("User email: %s", emailCookie.Value)
+	c.htmlView.GetPrivateCabWithYandexPage(r.RemoteAddr, emailCookie.Value, &w)
+}
+
+func (c *Controller) LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	c.log.Info("GET logout request from: %s", r.RemoteAddr)
+	cookies := []string{"auth_token", "user_email"}
+	for _, name := range cookies {
+		http.SetCookie(w, &http.Cookie{
+			Name:   name,
+			Value:  "",
+			Path:   "/",
+			MaxAge: -1, // Удалить куку
+		})
+	}
+
+	// Редирект на главную
+	http.Redirect(w, r, "/", http.StatusFound)
+}

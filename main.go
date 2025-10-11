@@ -81,7 +81,7 @@ func main() {
 		if appCfg.YandexEnable {
 			router.HandleFunc("/", mainCtrl.MainPageWithYandexHandler).Methods("GET")
 			router.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler).Methods("GET")
-			router.HandleFunc("/enter", mainCtrl.PrivateCabPageHandler).Methods("GET")
+			router.HandleFunc("/enter", mainCtrl.PrivateCabPageWithYandexHandler).Methods("GET")
 		} else {
 			router.HandleFunc("/", mainCtrl.MainPageHandler).Methods("GET")
 			router.HandleFunc("/enter", mainCtrl.PrivateCabPageHandler).Methods("GET")
