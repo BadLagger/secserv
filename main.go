@@ -82,6 +82,7 @@ func main() {
 			router.HandleFunc("/", mainCtrl.MainPageWithYandexHandler).Methods("GET")
 			router.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler).Methods("GET")
 			router.HandleFunc("/enter", mainCtrl.PrivateCabPageWithYandexHandler).Methods("GET")
+			router.HandleFunc("/logout", mainCtrl.LogoutHandler).Methods("GET")
 		} else {
 			router.HandleFunc("/", mainCtrl.MainPageHandler).Methods("GET")
 			router.HandleFunc("/enter", mainCtrl.PrivateCabPageHandler).Methods("GET")
