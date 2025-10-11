@@ -105,17 +105,17 @@
                 }
             )
             .then(({handler}) => {
-                console.log('SDK инициализирован!')
-                handler()
+                console.log('SDK инициализирован!');
+                handler();
             })
             .then(data => {
-                console.log('Сообщение с токеном', data)
-
+                console.log('Сообщение с токеном', data);
             })
             .catch(error => console.log('Обработка ошибки', error));
 
             // Функция проверки куки
             function checkAuthCookie() {
+                console.log("Tick-tick");
                 const cookies = document.cookie;
                 if (cookies.includes('auth_token=')) {
                     console.log('Auth cookie found! Redirecting...');
