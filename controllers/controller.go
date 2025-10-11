@@ -63,34 +63,41 @@ func (c *Controller) YandexAuthHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c.log.Debug("UserInfo: %s", userInfo.Email)
+	// Сохраняем в куки
+	http.SetCookie(w, &http.Cookie{
+		Name:     "auth_token",
+		Value:    token.AccessToken,
+		Path:     "/",
+		MaxAge:   3600, // 1 час
+		HttpOnly: true, // защита от XSS
+		Secure:   true, // только HTTPS
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "user_email",
+		Value:    userInfo.Email,
+		Path:     "/",
+		MaxAge:   3600,
+		HttpOnly: false, // чтобы JS мог прочитать если нужно
+		Secure:   true,
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	// Возвращаем страницу которая закроет popup
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintf(w, `
     <!DOCTYPE html>
     <html>
-    <head>
-        <title>Авторизация успешна</title>
-        <script>
-            // Отправляем сообщение в родительское окно
-			try {
-				window.opener.postMessage({
-					type: 'yandex_oauth_success',
-					token: '%s',
-					email: '%s',
-					user_id: '%s'
-				}, '*');
-				console.log("Windows msg was send!")
-			} catch (error) {
-			    console.error("Sending windows msg error:", error)
-			}
-            // Закрываем окно
-            // window.close();
-        </script>
-    </head>
+    <script>
+        // Просто закрываем окно - данные уже в куках!
+        window.close();
+    </script>
     <body>
-        <p>Авторизация успешна! Закрываю окно...</p>
+        Авторизация успешна! Закрываю окно...
     </body>
     </html>
-    `, token.AccessToken, userInfo.Email, userInfo.ID)
+    `)
 }
 
 func (c *Controller) MainPageHandler(w http.ResponseWriter, r *http.Request) {
