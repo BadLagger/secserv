@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mock page</title>
+        <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
+        <style>
+            body {
+                background-color: #f0f0f0;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+            
+            .auth-container {
+                background-color: white;
+                border-radius: 12px;
+                border: 1px solid #000;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                padding: 40px;
+                text-align: center;
+                max-width: 400px;
+                width: 90%;
+            }
+            
+            h1 {
+                margin-bottom: 30px;
+                color: #333;
+                font-size: 24px;
+            }
+            
+            #buttonContainerId {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .dynamic-button {
+                background-color: white;
+                border: 3px solid;
+                border-radius: 25px;
+                padding: 12px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-width: 120px;
+                text-decoration: none;
+                display: inline-block;
+            }
+            
+            .dynamic-button:hover {
+                opacity: 0.8;
+                transform: translateY(-2px);
+            }
+            
+            .dynamic-button:active {
+                background-color: inherit;
+                color: white;
+                transform: translateY(0);
+            }
+
+            .dynamic-button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            
+            .dynamic-button:disabled:hover {
+                transform: none;
+                opacity: 0.5;
+            }
+        </style>
+    </head>
+    <body>
+          <div class="auth-container">
+            <h1>Главная страница</h1>
+            <p>{{.UserIp}}</p>
+            <div id="buttonContainerId">
+            </div>
+        </div>
+        <script>
+            const oauthQueryParams = {
+                client_id: '{{.YaClientId}}',
+                response_type: 'code',
+                redirect_uri: '{{.YaRedirectURI}}'
+            };
+            
+            const tokenPageOrigin = 'https://oauth.yandex.ru';
+
+            window.YaAuthSuggest.init(
+                oauthQueryParams,
+                tokenPageOrigin,
+                {
+                    view: "button",
+                    parentId: "buttonContainerId",
+                    buttonSize: 'xl',
+                    buttonView: 'main',
+                    buttonTheme: 'light',
+                    buttonBorderRadius: "13",
+                    buttonIcon: 'ya',
+                }
+            )
+            .then(({handler}) => handler())
+            .then(data => console.log('Сообщение с токеном', data))
+            .catch(error => console.log('Обработка ошибки', error));
+        </script>
+    </body>
+</html>

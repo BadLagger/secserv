@@ -45,6 +45,11 @@ func (c *Controller) MainPageHandler(w http.ResponseWriter, r *http.Request) {
 	c.htmlView.GetMainPage(r.RemoteAddr, &w)
 }
 
+func (c *Controller) MainPageWithYandexHandler(w http.ResponseWriter, r *http.Request) {
+	c.log.Info("GET mainpage with yandex request from: %s", r.RemoteAddr)
+	c.htmlView.GetMainPageWithYandex(r.RemoteAddr, c.strData.YandexId, c.strData.YandexRedirectURI, &w)
+}
+
 func (c *Controller) PrivateCabPageHandler(w http.ResponseWriter, r *http.Request) {
 	c.log.Info("GET privatecabpage request from: %s", r.RemoteAddr)
 	c.htmlView.GetPrivateCabPage(r.RemoteAddr, &w)

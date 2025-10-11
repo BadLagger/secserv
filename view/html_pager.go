@@ -70,6 +70,20 @@ func (v *HtmlView) GetMainPage(ip string, w *http.ResponseWriter) {
 	})
 }
 
+func (v *HtmlView) GetMainPageWithYandex(ip, yaId, yaUri string, w *http.ResponseWriter) {
+	t, err := template.ParseFiles("templates/mifi_page1_ya.html")
+	if err != nil {
+		http.Error(*w, "Failed get mifi_page1.html", http.StatusInternalServerError)
+		return
+	}
+
+	t.Execute(*w, map[string]interface{}{
+		"UserIp":        ip,
+		"YaClientId":    yaId,
+		"YaRedirectURI": yaUri,
+	})
+}
+
 func (v *HtmlView) GetPrivateCabPage(ip string, w *http.ResponseWriter) {
 	t, err := template.ParseFiles("templates/mifi_page2.html")
 	if err != nil {
