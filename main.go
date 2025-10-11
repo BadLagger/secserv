@@ -47,6 +47,11 @@ func main() {
 			log.Critical("You should set enviromnent YANDEX_REDIRECT_URL")
 			return
 		}
+
+		if len(appCfg.YandexClientSecret) == 0 {
+			log.Critical("You should set enviromnent YANDEX_CLIENT_SECRET")
+			return
+		}
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -54,8 +59,13 @@ func main() {
 
 	mainView := view.NewHtmlView()
 	countServ := models.NewCountService()
-	strServ := models.NewStringService(appCfg.YandexId, appCfg.YandexRedirectURL)
-	mainCtrl := controllers.NewCountroller(countServ, strServ, mainView)
+	/*strServ := models.NewStringService(appCfg.YandexId,
+	appCfg.YandexRedirectURL,
+	appCfg.YandexClientSecret)*/
+	yaServ := models.NewYandexService(appCfg.YandexId,
+		appCfg.YandexRedirectURL,
+		appCfg.YandexClientSecret)
+	mainCtrl := controllers.NewCountroller(countServ, yaServ, mainView)
 
 	router := mux.NewRouter()
 	server := &http.Server{
@@ -70,6 +80,8 @@ func main() {
 
 		if appCfg.YandexEnable {
 			router.HandleFunc("/", mainCtrl.MainPageWithYandexHandler).Methods("GET")
+			router.HandleFunc("/yandex_oauth", mainCtrl.YandexAuthHandler).Methods("GET")
+			router.HandleFunc("/enter", mainCtrl.PrivateCabPageHandler).Methods("GET")
 		} else {
 			router.HandleFunc("/", mainCtrl.MainPageHandler).Methods("GET")
 			router.HandleFunc("/enter", mainCtrl.PrivateCabPageHandler).Methods("GET")

@@ -107,6 +107,22 @@
             .then(({handler}) => handler())
             .then(data => console.log('Сообщение с токеном', data))
             .catch(error => console.log('Обработка ошибки', error));
+
+            // В основном окне
+            window.addEventListener('message', function(event) {
+                if (event.data.type === 'yandex_oauth_success') {
+                        // Получаем данные из OAuth
+                    const token = event.data.token;
+                    const email = event.data.email;
+        
+                    // Сохраняем в localStorage/sessionStorage
+                    localStorage.setItem('yandex_token', token);
+                    localStorage.setItem('user_email', email);
+        
+                    // Перенаправляем на нужную страницу
+                    window.location.href = '/enter';
+                }
+});
         </script>
     </body>
 </html>
